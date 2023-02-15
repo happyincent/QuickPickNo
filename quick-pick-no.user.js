@@ -6,6 +6,7 @@
 // @version     1.0
 // @author      happyincent
 // @homepageURL https://github.com/happyincent/QuickPickNo
+// @require     https://cdn.jsdelivr.net/npm/sweetalert2@11
 // @grant       none
 // ==/UserScript==
 
@@ -21,7 +22,9 @@ try {
 
   document.querySelector("#next").click();
 } catch {
-  /** http://tanzih.blogspot.com/2013/09/4-80-80-yw-6675-6675-80-83.html */
+  let 吉吉s = [];
+
+  // http://tanzih.blogspot.com/2013/09/4-80-80-yw-6675-6675-80-83.html
   const 吉列表 = [
     { n: 1, s: "大展鴻圖．可獲成功", r: "吉" },
     { n: 2, s: "一盛一衰．勞而無功", r: "凶" },
@@ -105,20 +108,6 @@ try {
     { n: 81, s: "最極之數．能得成功", r: "吉" },
   ];
 
-  const isPrime = (num) => {
-    for (let i = 2, s = Math.sqrt(num); i <= s; i++) if (num % i === 0) return false;
-    return num > 1;
-  };
-
-  const shuffle = (arr) => {
-    const array = [...arr];
-    for (let i = array.length - 1; i > 0; i--) {
-      let j = Math.floor(Math.random() * (i + 1));
-      [array[i], array[j]] = [array[j], array[i]];
-    }
-    return array;
-  };
-
   const mapPlateTo吉吉 = (plate) => {
     const num = parseInt(plate.replace(/[^0-9]/g, ""));
     return {
@@ -136,23 +125,63 @@ try {
     return `${車牌}: ${吉1} | ${吉2}`;
   };
 
+  const isPrime = (num) => {
+    for (let i = 2, s = Math.sqrt(num); i <= s; i++)
+      if (num % i === 0) return false;
+    return num > 1;
+  };
+
+  const shuffle = (arr) => {
+    const array = [...arr];
+    for (let i = array.length - 1; i > 0; i--) {
+      let j = Math.floor(Math.random() * (i + 1));
+      [array[i], array[j]] = [array[j], array[i]];
+    }
+    return array;
+  };
+
   const filter吉吉 = (吉吉, callbackFn = (吉凶) => 吉凶 === "吉") => {
     const 吉列表n = 吉列表.filter((x) => callbackFn(x.r)).map((x) => x.n);
     return 吉列表n.includes(吉吉.n1) && 吉列表n.includes(吉吉.n2);
   };
 
-  const print吉吉s = (吉吉s, top = undefined, callbackFn = (吉吉) => filter吉吉(吉吉)) =>
-    console.log(shuffle(吉吉s.filter(callbackFn)).slice(0, top).map(map吉吉ToStr).join("\n"));
+  const random吉吉s = (
+    top = undefined,
+    callbackFn = (吉吉) => filter吉吉(吉吉)
+  ) => shuffle(吉吉s.filter(callbackFn)).slice(0, top);
+
+  const print吉吉s = (
+    top = undefined,
+    callbackFn = (吉吉) => filter吉吉(吉吉)
+  ) => console.log(random吉吉s(top, callbackFn).map(map吉吉ToStr).join("\n"));
+
+  const alert吉吉s = (
+    top = undefined,
+    callbackFn = (吉吉) => filter吉吉(吉吉)
+  ) => {
+    const result = random吉吉s(top, callbackFn);
+    Swal.fire({
+      title: "車牌選號",
+      html: result.length === 0 ? "揣無" : result.map(map吉吉ToStr).join("<br>"),
+      confirmButtonText: "繼續",
+      cancelButtonText: "結束",
+      showCancelButton: true,
+      width: 560,
+    }).then((swResult) => swResult.isConfirmed && alert吉吉s(top, callbackFn));
+  };
 
   const plates = JSON.parse(localStorage.getItem("plates") || "[]");
-  const 吉吉s = plates.map(mapPlateTo吉吉);
-  if (plates) localStorage.removeItem("plates");
+  吉吉s = plates.map(mapPlateTo吉吉);
 
-  window.吉車牌 = { 吉列表, isPrime, filter吉吉, print吉吉s, plates, 吉吉s };
+  window.吉車牌 = { plates, 吉列表, isPrime, filter吉吉, print吉吉s, alert吉吉s, };
 
-  console.log(`Usage: window.吉車牌.print吉吉s(window.吉車牌.吉吉s, 5);`);
-  window.吉車牌.print吉吉s(window.吉車牌.吉吉s, 5);
+  if (plates) {
+    localStorage.removeItem("plates");
 
-  console.log(`Usage: window.吉車牌.print吉吉s(window.吉車牌.吉吉s, 5, (x) => window.吉車牌.filter吉吉(x) && window.吉車牌.isPrime(x.num) && x.plate.toString().includes("87"));`);
-  window.吉車牌.print吉吉s(window.吉車牌.吉吉s, 5, (x) => window.吉車牌.filter吉吉(x) && window.吉車牌.isPrime(x.num) && x.plate.toString().includes("87"));
+    console.log(`Usage: window.吉車牌.alert吉吉s(5);`);
+    alert吉吉s(5);
+
+    console.log(`Usage: window.吉車牌.print吉吉s(5, (x) => window.吉車牌.filter吉吉(x) && window.吉車牌.isPrime(x.num) && x.plate.includes("87"));`);
+    print吉吉s(5, (x) => filter吉吉(x) && isPrime(x.num) && x.plate.includes("87"));
+  }
 }
