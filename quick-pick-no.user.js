@@ -3,7 +3,7 @@
 // @description 車牌號碼吉凶判斷
 // @namespace   https://github.com/happyincent/QuickPickNo
 // @match       https://www.mvdis.gov.tw/m3-emv-plate/webpickno/queryPickNo
-// @version     1.0
+// @version     1.1
 // @author      happyincent
 // @homepageURL https://github.com/happyincent/QuickPickNo
 // @require     https://cdn.jsdelivr.net/npm/sweetalert2@11
