@@ -132,7 +132,13 @@ try {
   const map吉吉ToStr = (吉吉) => {
     const 吉1 = 吉祥如意表.filter((t) => t.n === 吉吉.num1).map((t) => `${t.s} (${t.r})`);
     const 吉2 = 吉祥如意表.filter((t) => t.n === 吉吉.num2).map((t) => `${t.s} (${t.r})`);
-    return `${吉吉.plate}: ${吉1} | ${吉2}`;
+    return `${吉吉.plate}: ${[吉1, 吉2].filter(Boolean).join(" | ")}`;
+  };
+
+  const isOrdered = (num) => {
+    for (let digit = 9; num > 0; num = Math.trunc(num / 10))
+      if (digit < (digit = num % 10)) return false;
+    return true;
   };
 
   const isPrime = (num) => {
@@ -195,7 +201,7 @@ try {
   const plates = get();
   吉吉s = plates.map(mapPlateTo吉吉);
 
-  window.吉車牌 = { plates, 吉祥如意表, isPrime, filter吉吉, print吉吉s, alert吉吉s, };
+  window.吉車牌 = { plates, 吉祥如意表, isOrdered, isPrime, filter吉吉, print吉吉s, alert吉吉s, };
 
   if (plates.length > 0) {
     remove();
@@ -205,5 +211,8 @@ try {
 
     console.log(`Usage: window.吉車牌.print吉吉s(undefined, (x) => window.吉車牌.filter吉吉(x) && window.吉車牌.isPrime(x.num) && x.plate.includes("87"));`);
     print吉吉s(undefined, (x) => filter吉吉(x) && isPrime(x.num) && x.plate.includes("87"));
+
+    console.log(`Usage: window.吉車牌.print吉吉s(undefined, (x) => window.吉車牌.filter吉吉(x) && window.吉車牌.isOrdered(x.num));`);
+    print吉吉s(undefined, (x) => filter吉吉(x) && isOrdered(x.num));
   }
 }
