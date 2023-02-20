@@ -170,18 +170,26 @@ try {
     callbackFn = (吉吉) => filter吉吉(吉吉)
   ) => {
     const result = random吉吉s(top, callbackFn);
-    Swal.fire({
-      title: "吉車牌",
-      html:
-        result.length > 0
-          ? `<code>${result.map(map吉吉ToStr).join("<br>")}</code>`
-          : "揣無",
-      confirmButtonText: "繼續",
-      cancelButtonText: "結束",
-      showCancelButton: true,
-      allowOutsideClick: false,
-      width: result.length > 0 ? "66em" : undefined,
-    }).then((swResult) => swResult.isConfirmed && alert吉吉s(top, callbackFn));
+    try {
+      Swal.fire({
+        title: "吉車牌",
+        html:
+          result.length > 0
+            ? `<code>${result.map(map吉吉ToStr).join("<br>")}</code>`
+            : "揣無",
+        confirmButtonText: "繼續",
+        cancelButtonText: "結束",
+        showCancelButton: true,
+        allowOutsideClick: false,
+        width: result.length > 0 ? "66em" : undefined,
+      }).then(
+        (swResult) => swResult.isConfirmed && alert吉吉s(top, callbackFn)
+      );
+    } catch {
+      window.confirm(
+        result.length > 0 ? result.map((x) => x.plate).join("\n") : "揣無"
+      ) && alert吉吉s(top, callbackFn);
+    }
   };
 
   const plates = get();
